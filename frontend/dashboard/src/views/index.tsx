@@ -1,4 +1,4 @@
 import Home from "./home";
-import Private from "./private";
+import Dashboard from "./dashboard";
 
-export { Home, Private };
+export { Home, Dashboard };

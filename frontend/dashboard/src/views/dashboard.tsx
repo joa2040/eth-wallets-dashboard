@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
+import WalletList from "../components/dashboard/walletsList";
 
-const Private = () => (
+const Dashboard = () => (
     <Fragment>
-        Testing Private
+      <WalletList />
     </Fragment>
 );
 
-export default Private;
+export default Dashboard;

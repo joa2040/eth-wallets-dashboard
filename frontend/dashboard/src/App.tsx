@@ -1,8 +1,8 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import NavBar from "./components/nav/navBar";
 import { Loading } from "./components/utils";
-import { Home, Private } from "./views";
+import { Home, Dashboard } from "./views";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ProtectedRoute } from "./components/auht";
 import "./App.css";
@@ -22,8 +22,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route
-                        path="/private"
-                        element={<ProtectedRoute component={Private} />}
+                        path="/dashboard"
+                        element={<ProtectedRoute component={Dashboard} />}
                     />
                 </Routes>
             </div>

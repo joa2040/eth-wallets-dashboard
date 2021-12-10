@@ -12,12 +12,12 @@ const MainNav = () => (
       Home
     </NavLink>
     <NavLink
-      to="/private"
+      to="/dashboard"
       className={ ({isActive}) =>
         "nav-link" + (!isActive ? "" : " router-link-exact-active")
       }
     >
-      Private
+      Dashboard
     </NavLink>
   </div>
 );

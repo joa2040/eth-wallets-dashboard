@@ -1,3 +1,4 @@
 import Loading from "./loading";
+import GenericButton from "./button";
 
-export { Loading };
+export { Loading, GenericButton };
