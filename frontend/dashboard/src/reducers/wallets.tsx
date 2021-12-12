@@ -1,12 +1,12 @@
-import { Wallet, WalletActions } from "../interfaces";
+import { Action, Types, Wallet } from "../interfaces";
 
-const walletsReducer = (state: Wallet[], action: WalletActions) => {
+const walletsReducer = (state: Wallet[], action: Action) => {
   switch (action.type) {
-    case 'LOAD_WALLET':
+    case Types.Load:
       return [
-        ...action.payload
+        ...action.payload,
       ]
-    case 'EDIT_WALLET':
+    case Types.Edit:
       const index = state.findIndex(function(wallet){
         return wallet.id === action.payload.id;
       })
@@ -15,14 +15,15 @@ const walletsReducer = (state: Wallet[], action: WalletActions) => {
           action.payload,
           ...state.slice(index+1)
       ]
-    case 'ADD_WALLET':
+    case Types.Add:
       return [
         ...state,
         action.payload,
       ]
-    case 'REMOVE_WALLET':
+    case Types.Remove:
+      const test = state.filter(wallet => wallet.id !== action.payload.id);
       return [
-        ...state.filter(wallet => wallet.id !== action.payload.id),
+        ...test,
       ]
     default:
       return state;

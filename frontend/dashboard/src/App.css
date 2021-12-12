@@ -13,16 +13,41 @@
 }
 
 
-.spinner{
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  background: url('https://www.benmvp.com/f3b3c5fd2893249d60a9cadfc077b96d/loading-spinner-final.svg')
-  50% 50% no-repeat rgb(249,249,249);
+/*.spinner{*/
+/*  position: fixed;*/
+/*  left: 0px;*/
+/*  top: 0px;*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  z-index: 9999;*/
+/*  background: url('https://www.benmvp.com/f3b3c5fd2893249d60a9cadfc077b96d/loading-spinner-final.svg')*/
+/*  50% 50% no-repeat rgb(249,249,249);*/
+/*}*/
+
+.spinner-main > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
 }
+
+.spinner > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+
 
 .navbar-light.bg-light .nav-link {
     color: #041433
@@ -195,17 +220,19 @@
     }
 }
 
-.context-wrapper{
+.context-wrapper {
     display: flex;
     justify-content: center;
     height: 100%;
 }
-.dropbox{
+
+.dropbox {
     padding: 10px;
     width: 250px;
     min-height: 500px
 }
-.dragbox{
+
+.dragbox {
     user-select: none;
     padding: 15px;
     margin: 0 0 10px 0;

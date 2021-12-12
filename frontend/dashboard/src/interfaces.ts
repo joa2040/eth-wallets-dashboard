@@ -1,7 +1,9 @@
-import React, { ReactElement } from "react";
+import React from "react";
 
 export type InitialStateType = {
-  wallets: Wallet[];
+  wallets: Wallet[],
+  rates: ExchangeRate[]
+  isFetching: boolean
 }
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -13,13 +15,16 @@ type ActionMap<M extends { [index: string]: any }> = {
       type: Key;
       payload: M[Key];
     }
-};
+}
 
 export enum Types {
   Load = "LOAD_WALLET",
   Add = "ADD_WALLET",
   Remove = "REMOVE_WALLET",
-  Edit = "EDIT_WALLET"
+  Edit = "EDIT_WALLET",
+  LoadExchangeRates = "LOAD_RATES",
+  EditExchangeRate = "EDIT_EXCHANGE_RATE",
+  Fetching = "IS_FETCHING"
 }
 
 export type WalletPayload = {
@@ -31,15 +36,19 @@ export type WalletPayload = {
   }
 }
 
+export type ExchangeRatePayload = {
+  [Types.LoadExchangeRates]: ExchangeRate[],
+  [Types.EditExchangeRate]: ExchangeRate,
+}
+
+export type FetchingPayload = {
+  [Types.Fetching]: boolean,
+}
+
 export type WalletActions = ActionMap<WalletPayload>[keyof ActionMap<WalletPayload>];
-
-export interface Props {
-  children: React.ReactNode
-}
-
-export interface ProtectedRouteProps {
-  component: React.ComponentType
-}
+export type ExchangeRateActions = ActionMap<ExchangeRatePayload>[keyof ActionMap<ExchangeRatePayload>];
+export type FetchingActions = ActionMap<FetchingPayload>[keyof ActionMap<FetchingPayload>];
+export type Action = WalletActions | ExchangeRateActions | FetchingActions;
 
 export interface Wallet {
   id: string,
@@ -48,13 +57,21 @@ export interface Wallet {
   starred?: boolean
 }
 
-export interface WalletProps {
-  wallet: Wallet,
-  index: number
+export interface ExchangeRate {
+  id: string,
+  currency: string,
+  rate: number
 }
 
-export interface ButtonProps {
-  onClick: Function,
-  className?: string,
-  label: string | ReactElement<any>
+export type Props = {
+  children: React.ReactNode
+}
+
+export type ProtectedRouteProps = {
+  component: React.ComponentType
+}
+
+export type WalletProps = {
+  wallet: Wallet,
+  index: number,
 }
