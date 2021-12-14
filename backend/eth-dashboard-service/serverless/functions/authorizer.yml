@@ -1,0 +1,6 @@
+Authorizer:
+  name: ${self:custom.authorizer-service-name}
+  handler: dist/src/authorizer/authorizer.handler
+  environment:
+    AUTH0_DOMAIN: ${self:custom.config.auth0.domain}
+    AUTH0_CLIENT_ID: ${self:custom.config.auth0.clientId}

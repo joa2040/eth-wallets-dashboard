@@ -1,0 +1,54 @@
+service: securitize-dashboard-service
+variablesResolutionMode: 20210326
+
+package:
+  exclude:
+    - env/**
+
+plugins:
+  - serverless-offline
+
+custom:
+  stage: ${opt:stage, 'd'}
+  config: ${file(./env/env.${self:custom.stage}.json)}
+  walletsTable:
+    name: ${self:custom.stage}-wallets
+    arn: !GetAtt walletsTable.Arn
+  exchangeRatesTable:
+    name: ${self:custom.stage}-exchangeRates
+    arn: !GetAtt exchangeRatesTable.Arn
+  currenciesTable:
+    name: ${self:custom.stage}-currencies
+    arn: !GetAtt currenciesTable.Arn
+  authorizer-service-name: ${self:service}-authorizer-${self:custom.stage}
+  dashboard-service-name: ${self:service}-proxy-${self:custom.stage}
+
+provider:
+  name: aws
+  profile: joaquin
+  runtime: nodejs14.x
+  memorySize: 256
+  logRetentionInDays: 3
+  versionFunctions: false
+  lambdaHashingVersion: 20201221
+  environment:
+    ETHERSCAN_NETWORK: ${self:custom.config.etherscan.network}
+    ETHERSCAN_API_KEY: ${self:custom.config.etherscan.apiKey}
+    WALLETS_TABLE_NAME: ${self:custom.walletsTable.name}
+    EXCHANGE_RATES_TABLE_NAME: ${self:custom.exchangeRatesTable.name}
+    CURRENCIES_TABLE_NAME: ${self:custom.currenciesTable.name}
+  iamRoleStatements: ${file(serverless/roles.yml)}
+
+resources:
+  Resources:
+    walletsTable: ${file(serverless/database.yml):walletsTable}
+    exchangeRatesTable: ${file(serverless/database.yml):exchangeRatesTable}
+    currenciesTable: ${file(serverless/database.yml):currenciesTable}
+
+functions:
+  # Authorizer
+  - ${file(serverless/functions/authorizer.yml)}
+
+  # Dashboard Proxy
+  - ${file(serverless/functions/dashboard-proxy.yml)}
+

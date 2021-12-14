@@ -1,0 +1,43 @@
+walletsTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: ${self:custom.walletsTable.name}
+    AttributeDefinitions:
+      - AttributeName: address
+        AttributeType: S
+      - AttributeName: user
+        AttributeType: S
+    KeySchema:
+      - AttributeName: address
+        KeyType: HASH
+      - AttributeName: user
+        KeyType: RANGE
+    BillingMode: PAY_PER_REQUEST
+
+exchangeRatesTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: ${self:custom.exchangeRatesTable.name}
+    AttributeDefinitions:
+      - AttributeName: user
+        AttributeType: S
+      - AttributeName: currency
+        AttributeType: S
+    KeySchema:
+      - AttributeName: user
+        KeyType: HASH
+      - AttributeName: currency
+        KeyType: RANGE
+    BillingMode: PAY_PER_REQUEST
+
+currenciesTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: ${self:custom.currenciesTable.name}
+    AttributeDefinitions:
+      - AttributeName: currency
+        AttributeType: S
+    KeySchema:
+      - AttributeName: currency
+        KeyType: HASH
+    BillingMode: PAY_PER_REQUEST

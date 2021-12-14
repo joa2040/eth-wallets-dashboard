@@ -1,0 +1,14 @@
+Proxy:
+  name: ${self:custom.dashboard-service-name}
+  handler: dist/src/proxy.handler
+  events:
+    - http:
+        method: ANY
+        path: /
+    - http:
+        method: ANY
+        path: '{proxy+}'
+#        authorizer:
+#          arn: arn:aws:lambda:${aws:region}:${aws:accountId}:function:${self:custom.authorizer-service-name}
+#          type: token
+#          resultTtlInSeconds: 0
