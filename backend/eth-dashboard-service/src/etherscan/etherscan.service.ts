@@ -27,7 +27,7 @@ const provider = new ethers.providers.EtherscanProvider(
 export class EtherscanService {
 
   /**
-   * Return information account for the address parameter
+   * Return account balance for the address parameter
    *
    * @param address
    * @return Promise<EtherscanSingleBalanceResponse>
@@ -37,13 +37,23 @@ export class EtherscanService {
   }
 
   /**
-   * Return information account for the address parameter
+   * Return transactions account for the address parameter
    *
    * @param address
    * @return Promise<Array<TransactionResponse>>
    */
   async getHistory(address: string): Promise<Array<TransactionResponse>> {
     return provider.getHistory(address);
+  }
+
+  /**
+   * Return if the address is valid
+   *
+   * @param address
+   * @return boolean
+   */
+  isValidAddress(address: string): boolean {
+    return ethers.utils.isAddress(address);
   }
 
   /**

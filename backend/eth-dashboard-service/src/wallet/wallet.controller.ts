@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put } from "@nestjs/common";
 import { WalletService } from "./wallet.service";
 import { Wallet } from "./interfaces/wallet.interface";
 import logger from "lambda-log";
@@ -40,7 +40,7 @@ export class WalletController {
       logger.error(e);
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
-        error: "Unexpected error, please check wallet address"
+        error: e.message
       }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -76,6 +76,26 @@ export class WalletController {
     logger.info(`Getting wallets for user ${user}`);
     try {
       return this.walletService.loadWalletsByUser(user);
+    } catch (e) {
+      logger.error(e);
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: "Unexpected error, please try again later"
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /**
+   * Delete method to delete a wallet
+   *
+   * @param wallets[]
+   * @return Promise<void>
+   */
+  @Delete()
+  async deleteWallet(@Body() wallet: Wallet): Promise<void> {
+    logger.info(`Updating wallets...`);
+    try {
+      await this.walletService.deleteWallet(wallet);
     } catch (e) {
       logger.error(e);
       throw new HttpException({

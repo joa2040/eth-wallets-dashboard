@@ -37,7 +37,7 @@ export class ExchangeRateController {
    */
   @Get("/:user")
   async loadExchangeRates(@Param("user") user): Promise<ExchangeRate[]> {
-    logger.info(`Getting wallets for user ${user}`);
+    logger.info(`Getting exchange rates for user ${user}`);
     try {
       return this.exchangeRateService.loadExchangeRates(user);
     } catch (e) {

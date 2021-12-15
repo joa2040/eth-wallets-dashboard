@@ -28,6 +28,7 @@ provider:
   profile: joaquin
   runtime: nodejs14.x
   memorySize: 256
+  timeout: 15
   logRetentionInDays: 3
   versionFunctions: false
   lambdaHashingVersion: 20201221

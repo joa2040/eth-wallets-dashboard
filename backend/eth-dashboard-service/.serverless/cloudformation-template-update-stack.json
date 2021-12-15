@@ -206,13 +206,13 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/securitize-dashboard-service/d/1639489677237-2021-12-14T13:47:57.237Z/securitize-dashboard-service.zip"
+          "S3Key": "serverless/securitize-dashboard-service/d/1639604491455-2021-12-15T21:41:31.455Z/securitize-dashboard-service.zip"
         },
         "Handler": "dist/src/authorizer/authorizer.handler",
         "Runtime": "nodejs14.x",
         "FunctionName": "securitize-dashboard-service-authorizer-d",
         "MemorySize": 256,
-        "Timeout": 6,
+        "Timeout": 15,
         "Environment": {
           "Variables": {
             "ETHERSCAN_NETWORK": "kovan",
@@ -242,13 +242,13 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/securitize-dashboard-service/d/1639489677237-2021-12-14T13:47:57.237Z/securitize-dashboard-service.zip"
+          "S3Key": "serverless/securitize-dashboard-service/d/1639604491455-2021-12-15T21:41:31.455Z/securitize-dashboard-service.zip"
         },
         "Handler": "dist/src/proxy.handler",
         "Runtime": "nodejs14.x",
         "FunctionName": "securitize-dashboard-service-proxy-d",
         "MemorySize": 256,
-        "Timeout": 6,
+        "Timeout": 15,
         "Environment": {
           "Variables": {
             "ETHERSCAN_NETWORK": "kovan",
@@ -291,6 +291,99 @@
           ]
         },
         "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodProxyVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceProxyVar"
+        },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -391,7 +484,7 @@
         "ProxyLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1639489655761": {
+    "ApiGatewayDeployment1639604462669": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -400,6 +493,8 @@
         "StageName": "d"
       },
       "DependsOn": [
+        "ApiGatewayMethodOptions",
+        "ApiGatewayMethodProxyVarOptions",
         "ApiGatewayMethodAny",
         "ApiGatewayMethodProxyVarAny"
       ]

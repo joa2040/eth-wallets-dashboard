@@ -27,6 +27,11 @@ export class WalletService {
    * @return Promise<Wallet>
    */
   async addWallet(wallet: Wallet): Promise<Wallet> {
+
+    if (!this.etherscanService.isValidAddress(wallet.address)) {
+      throw new InternalServerErrorException(`Invalid address, please check it and try again`);
+    }
+
     wallet.id = uuid();
     wallet.starred = false;
 
@@ -44,6 +49,8 @@ export class WalletService {
           Item: wallet
         }).promise();
 
+      wallet.isOld = isWalletOld(wallet.firstTransaction);
+      wallet.balance = this.etherscanService.formatEther(await this.etherscanService.getBalance(wallet.address));
       return wallet;
     } catch (error) {
       logger.error(error);
@@ -95,7 +102,7 @@ export class WalletService {
     const decorateWallets = wallets.map(async wallet => {
       wallet.isOld = isWalletOld(wallet.firstTransaction);
       wallet.balance = this.etherscanService.formatEther(await this.etherscanService.getBalance(wallet.address));
-    })
+    });
     await Promise.all(decorateWallets);
     return wallets;
   }
@@ -117,4 +124,22 @@ export class WalletService {
     });
     await dynamoDB.transactWrite({ TransactItems: params }).promise();
   }
+
+  /**
+   * Delete a wallet by address
+   *
+   * @param wallet
+   * @return Promise<Wallet> | null
+   */
+  async deleteWallet(wallet: Wallet): Promise<void> {
+    const params = {
+      TableName: WALLETS_TABLE_NAME,
+      Key: {
+        "address": wallet.address,
+        "user": wallet.user
+      }
+    };
+    await dynamoDB.delete(params).promise();
+  }
 }
+
