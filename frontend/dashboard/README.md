@@ -1,6 +1,9 @@
 ## Description
 Dashboard to manage eth wallets. This test app uses kovan network.
 
+## Live App
+https://main.dw68vq51wyov4.amplifyapp.com/
+
 ## Available Scripts
 
 In the project directory, you can run:

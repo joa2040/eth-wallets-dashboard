@@ -1,6 +1,9 @@
 # eth-wallets-dashboard
 Basic Dashboard to interact with eth wallets
 
+## Live App
+https://main.dw68vq51wyov4.amplifyapp.com/
+
 Clone both projects
 * backend/eth-dashboard-service
 * frontend/dashboard

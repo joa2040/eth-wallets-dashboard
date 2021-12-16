@@ -2,6 +2,9 @@
 
 Business logic for challenge dashboard. This project is deployed as serverless project on AWS. To install it please run.
 
+## Live App
+https://main.dw68vq51wyov4.amplifyapp.com/
+
 ```
 npm install -g serverless
 ```
