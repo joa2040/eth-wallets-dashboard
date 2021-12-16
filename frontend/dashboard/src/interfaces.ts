@@ -10,6 +10,7 @@ export type InitialStateType = {
 export type InitialLoadingStateType = {
   loadingCount: number,
   errorMessage: string,
+  errorCount: number,
   showLoading: Function,
   hideLoading: Function,
   showError: Function,

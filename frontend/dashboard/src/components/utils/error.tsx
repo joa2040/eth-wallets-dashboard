@@ -5,16 +5,16 @@ import { BsFillExclamationTriangleFill } from "react-icons/bs";
 
 
 const Error = () => {
-  const [ error, setError ] = useState('');
+  const [ { error, count }, setError ] = useState({ error: '', count: 0 });
   const [ show, setShow ] = useState(false);
-  const { errorMessage } = useContext(LoadingContext);
+  const { errorMessage, errorCount } = useContext(LoadingContext);
 
   useEffect(() => {
-    if (errorMessage) {
+    if (errorMessage && errorCount > count) {
       setShow(true);
-      setError(errorMessage);
+      setError({ error: errorMessage, count });
     }
-  }, [ errorMessage, setError ])
+  }, [ errorMessage, setError, errorCount ])
 
   return (
     <ToastContainer className="p-3 end-0" style={{ position: "fixed", top: 0, zIndex: 999}}>

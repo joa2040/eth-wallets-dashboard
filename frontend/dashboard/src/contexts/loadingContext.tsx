@@ -4,6 +4,7 @@ import { InitialLoadingStateType } from "../interfaces";
 const initialState: InitialLoadingStateType = {
   loadingCount: 0,
   errorMessage: '',
+  errorCount: 0,
   showLoading: () => {},
   hideLoading: () => {},
   showError: () => {},
@@ -39,7 +40,8 @@ const LoadingProvider: React.FC<PropsWithChildren<{ children: any }>> = ({ child
         ...prevState,
         loadingCount:
           prevState.loadingCount > 0 ? prevState.loadingCount - 1 : 0,
-        errorMessage: message
+        errorMessage: message,
+        errorCount: prevState.errorCount + 1
       }
     })
   }
@@ -56,6 +58,7 @@ const LoadingProvider: React.FC<PropsWithChildren<{ children: any }>> = ({ child
   const loadingState = {
     loadingCount: 0,
     errorMessage: '',
+    errorCount: 0,
     showLoading,
     hideLoading,
     showError,
