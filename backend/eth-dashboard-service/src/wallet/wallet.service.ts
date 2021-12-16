@@ -27,19 +27,16 @@ export class WalletService {
    * @return Promise<Wallet>
    */
   async addWallet(wallet: Wallet): Promise<Wallet> {
-
     if (!this.etherscanService.isValidAddress(wallet.address)) {
       throw new InternalServerErrorException(`Invalid address, please check it and try again`);
     }
 
     wallet.id = uuid();
     wallet.starred = false;
-
-    const transactions = await this.etherscanService.getHistory(wallet.address);
-
+    const transactions = await this.etherscanService.getHistoryV2(wallet.address);
     if (transactions && transactions[0]) {
       const firstTransaction = transactions[0];
-      wallet.firstTransaction = firstTransaction.timestamp;
+      wallet.firstTransaction = Number(firstTransaction.timeStamp);
     }
 
     try {
@@ -51,6 +48,7 @@ export class WalletService {
 
       wallet.isOld = isWalletOld(wallet.firstTransaction);
       wallet.balance = this.etherscanService.formatEther(await this.etherscanService.getBalance(wallet.address));
+
       return wallet;
     } catch (error) {
       logger.error(error);

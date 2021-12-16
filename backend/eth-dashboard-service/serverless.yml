@@ -34,6 +34,7 @@ provider:
   lambdaHashingVersion: 20201221
   environment:
     ETHERSCAN_NETWORK: ${self:custom.config.etherscan.network}
+    ETHERSCAN_URL: ${self:custom.config.etherscan.url}
     ETHERSCAN_API_KEY: ${self:custom.config.etherscan.apiKey}
     WALLETS_TABLE_NAME: ${self:custom.walletsTable.name}
     EXCHANGE_RATES_TABLE_NAME: ${self:custom.exchangeRatesTable.name}

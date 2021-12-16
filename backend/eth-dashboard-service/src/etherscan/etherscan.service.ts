@@ -2,8 +2,12 @@ import { Injectable } from "@nestjs/common";
 import config from "config";
 import { BigNumber, ethers } from "ethers";
 import { TransactionResponse } from "@ethersproject/abstract-provider";
+import logger from "lambda-log";
+import axios from "axios";
+import { EtherscanTransactionsResponse, Transaction } from "./interfaces/etherscan.interface";
 
 const ETHERSCAN_NETWORK = config.get("etherscan.network");
+const ETHERSCAN_NETWORK_URL = config.get("etherscan.url");
 const ETHERSCAN_API_KEY = config.get("etherscan.apiKey");
 
 const provider = new ethers.providers.EtherscanProvider(
@@ -37,13 +41,33 @@ export class EtherscanService {
   }
 
   /**
+   * @deprecated
    * Return transactions account for the address parameter
+   *
+   * Deprecated method because etherjs does not allow pagination in its method,
+   * some wallets searches take too much time
    *
    * @param address
    * @return Promise<Array<TransactionResponse>>
    */
   async getHistory(address: string): Promise<Array<TransactionResponse>> {
     return provider.getHistory(address);
+  }
+
+  /**
+   * Return transactions account for the address parameter
+   *
+   * @param address
+   * @return Promise<Array<TransactionResponse>>
+   */
+  async getHistoryV2(address: string): Promise<Array<Transaction>> {
+    const url = `${ETHERSCAN_NETWORK_URL}api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&page=1&offset=1tag=latest&apikey=${ETHERSCAN_API_KEY}`;
+    const { data } = await axios.get<EtherscanTransactionsResponse>(url);
+    if (data.status !== "1") {
+      logger.error(`Etherscan failed ${data.message}`);
+      throw new Error(data.message);
+    }
+    return data.result;
   }
 
   /**
@@ -62,7 +86,7 @@ export class EtherscanService {
    * @param balance
    */
   formatEther(balance: BigNumber) {
-    return ethers.utils.formatEther(balance)
+    return ethers.utils.formatEther(balance);
   }
 
 }

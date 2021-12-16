@@ -8,7 +8,8 @@ import logger from "lambda-log";
  */
 @Controller("/wallet")
 export class WalletController {
-  constructor(private readonly walletService: WalletService) {}
+  constructor(private readonly walletService: WalletService) {
+  }
 
   /**
    * Post method to create a new wallet
@@ -72,7 +73,7 @@ export class WalletController {
    * @return Promise<Wallet[]>
    */
   @Get("/:user")
-  async getWallets(@Param('user') user): Promise<Wallet[]> {
+  async getWallets(@Param("user") user): Promise<Wallet[]> {
     logger.info(`Getting wallets for user ${user}`);
     try {
       return await this.walletService.loadWalletsByUser(user);

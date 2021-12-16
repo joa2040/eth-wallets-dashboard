@@ -37,8 +37,14 @@ const config = convict({
     network: {
       doc: 'Network used by etherscan service',
       format: String,
-      default: 'https://api-kovan.etherscan.io/',
+      default: 'kovan',
       env: 'ETHERSCAN_NETWORK'
+    },
+    url: {
+      doc: 'Url used by etherscan service',
+      format: String,
+      default: 'https://api-kovan.etherscan.io/',
+      env: 'ETHERSCAN_URL'
     },
     apiKey: {
       doc: 'ApiKey used by etherscan service',
