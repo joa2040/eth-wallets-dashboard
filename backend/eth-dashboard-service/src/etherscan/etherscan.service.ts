@@ -63,10 +63,6 @@ export class EtherscanService {
   async getHistoryV2(address: string): Promise<Array<Transaction>> {
     const url = `${ETHERSCAN_NETWORK_URL}api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&sort=asc&page=1&offset=1tag=latest&apikey=${ETHERSCAN_API_KEY}`;
     const { data } = await axios.get<EtherscanTransactionsResponse>(url);
-    if (data.status !== "1") {
-      logger.error(`Etherscan failed ${data.message}`);
-      throw new Error(data.message);
-    }
     return data.result;
   }
 
