@@ -1,15 +1,17 @@
 import { Button, Col, Form, FormControl, FormSelect, Row } from "react-bootstrap";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ExchangeRate, Types } from "../../interfaces";
-import { AppContext } from "../../context";
+import { AppContext } from "../../contexts/appContext";
+import { useAuth0 } from "@auth0/auth0-react";
+import { saveExchangeRates } from "../../middleware";
+import { LoadingContext } from "../../contexts/loadingContext";
 
 const SetExchangeRate = ({ defaultRate }: { defaultRate: ExchangeRate }) => {
   const { state, dispatch } = useContext(AppContext);
-  useEffect(() => {
-    dispatch({ type: Types.Fetching, payload: false });
-  }, [ state.rates, dispatch ]);
+  const { showLoading, hideLoading } = useContext(LoadingContext)
+  const { user } = useAuth0();
 
-  const [ { id, currency, rate }, setState ] = useState(defaultRate);
+  const [ { currency, rate }, setState ] = useState(defaultRate);
 
   const handleOnChangeCurrency = (newCurrency: string) => {
     const selectedCurrency = state.rates.find(r => r.currency === newCurrency);
@@ -17,12 +19,23 @@ const SetExchangeRate = ({ defaultRate }: { defaultRate: ExchangeRate }) => {
   }
 
   const handleOnChangeRate = (newRate: number) => {
-    setState({ id, currency, rate: newRate });
+    setState({ currency, rate: newRate, user: user?.email });
   }
 
-  const handleSaveExchangeRate = () => {
-    dispatch({ type: Types.Fetching, payload: true });
-    dispatch({ type: Types.EditExchangeRate, payload: { id, currency, rate } })
+  const handleSaveExchangeRate = async () => {
+    showLoading();
+    const index = state.rates.findIndex(function (er) {
+      return er.currency === currency;
+    })
+    const rates = [
+      ...state.rates.slice(0, index),
+      { currency, rate, user: user?.email },
+      ...state.rates.slice(index + 1)
+    ]
+    await saveExchangeRates(rates);
+
+    dispatch({ type: Types.LoadExchangeRates, payload: rates });
+    hideLoading();
   }
 
   return (
@@ -37,7 +50,7 @@ const SetExchangeRate = ({ defaultRate }: { defaultRate: ExchangeRate }) => {
             defaultValue={currency}
           >
             {state.rates.map((r: ExchangeRate) => (
-              <option key={r.id} value={r.currency}>{r.currency}</option>
+              <option key={r.currency} value={r.currency}>{r.currency}</option>
             ))}
           </FormSelect>
         </Col>

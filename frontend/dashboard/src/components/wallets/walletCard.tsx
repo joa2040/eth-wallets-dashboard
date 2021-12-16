@@ -3,21 +3,31 @@ import { ExchangeRate, Types, Wallet, WalletProps } from "../../interfaces";
 import { Draggable } from "react-beautiful-dnd";
 import React, { useContext, useState } from "react";
 import { BsStar, BsStarFill } from "react-icons/bs";
-import { AppContext } from "../../context";
+import { AppContext } from "../../contexts/appContext";
 import PropTypes from "prop-types";
+import { updateWallets } from "../../middleware";
+import { LoadingContext } from "../../contexts/loadingContext";
+import moment from "moment";
+import { deleteWallet } from "../../middleware/wallet";
 
 const dollarUS = Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
 
-const WalletCard = ({ wallet, index }: WalletProps) => {
+const WalletCard = ({ wallet, defaultRate, index }: WalletProps) => {
 
   const { state, dispatch } = useContext(AppContext);
-  const [ rate, setRate ] = useState(state.rates[0]);
+  const [ rate, setRate ] = useState(defaultRate);
   const [ showModal, setShowModal ] = useState(false);
+  const { showLoading, hideLoading } = useContext(LoadingContext);
 
-  const handleStarClick = (wallet: Wallet) => {
+  const transactionMessage = wallet.firstTransaction ?
+    `Last Transaction ${moment.unix(wallet.firstTransaction).format("MM/DD/YYYY")}` : `Wallet has no transactions yet`
+  const message = wallet.isOld ? `Wallet is old! ${transactionMessage}` : transactionMessage;
+
+  const handleStarClick = async (wallet: Wallet) => {
+    showLoading();
     wallet.starred = !wallet.starred;
     const updatedWallets = [
       ...state.wallets.slice(0, index),
@@ -29,10 +39,17 @@ const WalletCard = ({ wallet, index }: WalletProps) => {
       return Number(n.starred) - Number(p.starred);
     });
 
+    updatedWallets.forEach((wallet, index) => {
+      wallet.position = index;
+    })
+
+    await updateWallets(updatedWallets);
+
     dispatch({
       type: Types.Load,
       payload: updatedWallets
     });
+    hideLoading();
   }
 
   const handleOnChangeCurrency = (currency: string) => {
@@ -40,15 +57,27 @@ const WalletCard = ({ wallet, index }: WalletProps) => {
     selectedRate && setRate(selectedRate);
   }
 
-  const handleRemoveWallet = () => {
-    dispatch({ type: Types.Fetching, payload: true });
+  const handleRemoveWallet = async () => {
     setShowModal(false);
-    dispatch({ type: Types.Remove, payload: { id: wallet.id } });
+    showLoading();
+
+    const wallets = state.wallets.filter(w => w.address !== wallet.address);
+    await deleteWallet(wallet);
+    wallets.forEach((wallet, index) => {
+      wallet.position = index;
+    });
+    await updateWallets(wallets);
+    dispatch({
+      type: Types.Load,
+      payload: wallets
+    });
+
+    hideLoading();
   }
 
   return (
     <>
-      <Draggable draggableId={wallet.id} index={index}>
+      <Draggable draggableId={wallet.address} index={index}>
         {provided => (
           <Card className="mb-2"
                 ref={provided.innerRef}
@@ -72,8 +101,8 @@ const WalletCard = ({ wallet, index }: WalletProps) => {
               </Row>
             </Card.Header>
             <Card.Body>
-              <Alert variant="danger" className="p-2">
-                Wallet is old!
+              <Alert variant={wallet.isOld ? "danger" : "info"} className="p-2">
+                {message}
               </Alert>
               <Row>
                 <Col xs="2">
@@ -85,7 +114,7 @@ const WalletCard = ({ wallet, index }: WalletProps) => {
                     defaultValue={rate.currency}
                   >
                     {state.rates.map((r: ExchangeRate) => (
-                      <option key={r.id} value={r.currency}>{r.currency}</option>
+                      <option key={r.currency} value={r.currency}>{r.currency}</option>
                     ))}
                   </FormSelect>
                 </Col>

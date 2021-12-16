@@ -2,8 +2,18 @@ import React from "react";
 
 export type InitialStateType = {
   wallets: Wallet[],
-  rates: ExchangeRate[]
-  isFetching: boolean
+  rates: ExchangeRate[],
+  error: boolean,
+  currencies: Currency[]
+}
+
+export type InitialLoadingStateType = {
+  loadingCount: number,
+  errorMessage: string,
+  showLoading: Function,
+  hideLoading: Function,
+  showError: Function,
+  cleanError: Function
 }
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -24,7 +34,8 @@ export enum Types {
   Edit = "EDIT_WALLET",
   LoadExchangeRates = "LOAD_RATES",
   EditExchangeRate = "EDIT_EXCHANGE_RATE",
-  Fetching = "IS_FETCHING"
+  LoadCurrencies = "LOAD_CURRENCIES",
+  Error = "SET_ERROR"
 }
 
 export type WalletPayload = {
@@ -41,26 +52,39 @@ export type ExchangeRatePayload = {
   [Types.EditExchangeRate]: ExchangeRate,
 }
 
-export type FetchingPayload = {
-  [Types.Fetching]: boolean,
+export type CurrencyPayload = {
+  [Types.LoadCurrencies]: Currency[],
+}
+
+export type ErrorPayload = {
+  [Types.Error]: boolean,
 }
 
 export type WalletActions = ActionMap<WalletPayload>[keyof ActionMap<WalletPayload>];
 export type ExchangeRateActions = ActionMap<ExchangeRatePayload>[keyof ActionMap<ExchangeRatePayload>];
-export type FetchingActions = ActionMap<FetchingPayload>[keyof ActionMap<FetchingPayload>];
-export type Action = WalletActions | ExchangeRateActions | FetchingActions;
+export type CurrencyActions = ActionMap<CurrencyPayload>[keyof ActionMap<CurrencyPayload>];
+export type ErrorActions = ActionMap<ErrorPayload>[keyof ActionMap<ErrorPayload>];
+export type Action = WalletActions | ExchangeRateActions | ErrorActions | CurrencyActions;
 
 export interface Wallet {
-  id: string,
+  id?: string,
   address: string,
   balance: number,
-  starred?: boolean
+  starred?: boolean,
+  isOld?: boolean,
+  firstTransaction?: number
+  position: number;
+  user?: string
 }
 
 export interface ExchangeRate {
-  id: string,
   currency: string,
-  rate: number
+  rate: number,
+  user?: string
+}
+
+export interface Currency {
+  currency: string,
 }
 
 export type Props = {
@@ -73,5 +97,6 @@ export type ProtectedRouteProps = {
 
 export type WalletProps = {
   wallet: Wallet,
+  defaultRate: ExchangeRate,
   index: number,
 }

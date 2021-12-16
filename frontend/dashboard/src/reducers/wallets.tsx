@@ -20,11 +20,6 @@ const walletsReducer = (state: Wallet[], action: Action) => {
         ...state,
         action.payload,
       ]
-    case Types.Remove:
-      const test = state.filter(wallet => wallet.id !== action.payload.id);
-      return [
-        ...test,
-      ]
     default:
       return state;
   }

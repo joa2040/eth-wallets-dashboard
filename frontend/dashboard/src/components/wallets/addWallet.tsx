@@ -1,24 +1,31 @@
 import { Button, Col, Form, FormControl, Row } from "react-bootstrap";
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../context";
-import { Types, Wallet } from "../../interfaces";
+import { useContext, useState } from "react";
+import { AppContext } from "../../contexts/appContext";
+import { Types } from "../../interfaces";
+import { addWallet } from "../../middleware";
+import { LoadingContext } from "../../contexts/loadingContext";
+import { useAuth0 } from "@auth0/auth0-react";
+import { AxiosError } from "axios";
 
 const AddWallet = () => {
-  const [address, setAddress] = useState('');
-  const {state, dispatch} = useContext(AppContext);
+  const [ address, setAddress ] = useState('');
+  const { state, dispatch } = useContext(AppContext);
+  const { showLoading, hideLoading, showError } = useContext(LoadingContext);
+  const { user } = useAuth0();
 
-  useEffect( () => {
-    dispatch({ type: Types.Fetching, payload: false});
-  }, [state.wallets, dispatch]);
-
-  const handleAddWallet = () => {
-    dispatch({ type: Types.Fetching, payload: true});
-    const wallet: Wallet = {address, id: Math.random().toString(), balance: 88};
-
-    dispatch({
-      type: Types.Add,
-      payload: wallet
-    });
+  const handleAddWallet = async () => {
+    showLoading();
+    try {
+      const wallet = await addWallet({ address, position: state.wallets.length + 1, balance: 0, user: user?.email });
+      dispatch({
+        type: Types.Add,
+        payload: wallet
+      });
+      hideLoading();
+    } catch(e) {
+      const axiosError = e as AxiosError;
+      showError(axiosError.response?.data.error);
+    }
   }
 
   return (

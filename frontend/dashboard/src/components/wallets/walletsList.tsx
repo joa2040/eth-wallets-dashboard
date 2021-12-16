@@ -1,16 +1,19 @@
-import { WalletCard } from "./";
+import WalletCard from "./walletCard";
 import React, { useContext } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { Types, Wallet } from "../../interfaces";
-import { AppContext } from "../../context";
-import Loader from "react-loader-spinner";
-import { Container } from "react-bootstrap";
+import { ExchangeRate, Types, Wallet } from "../../interfaces";
+import { AppContext } from "../../contexts/appContext";
+import { updateWallets } from "../../middleware";
+import { LoadingContext } from "../../contexts/loadingContext";
 
-const WalletList = () => {
+const WalletList = ({ defaultRate }: { defaultRate: ExchangeRate }) => {
   const { state, dispatch } = useContext(AppContext);
+  const { showLoading, hideLoading } = useContext(LoadingContext);
 
-  const onDragEnd = (result: DropResult) => {
+  const onDragEnd = async (result: DropResult) => {
+    showLoading();
     if (!result.destination || result.destination.index === result.source.index) {
+      hideLoading();
       return;
     }
 
@@ -22,34 +25,33 @@ const WalletList = () => {
       return Number(n.starred) - Number(p.starred);
     });
 
+    copiedWallets.forEach((wallet, index) => {
+      wallet.position = index;
+    });
+
+    await updateWallets(copiedWallets);
+
     dispatch({
       type: Types.Load,
       payload: copiedWallets
     });
+
+    hideLoading();
   };
 
   return (
-    state.isFetching ?
-      <Container className="spinner">
-        <Loader
-          type="Puff"
-          color="#00BFFF"
-          height={100}
-          width={100}
-        />
-      </Container> :
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="list">
-          {provided => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              {state.wallets.map((wallet: Wallet, index: number) => (
-                <WalletCard wallet={wallet} index={index} key={wallet.id}/>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="list">
+        {provided => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            {state.wallets.map((wallet: Wallet, index: number) => (
+              <WalletCard wallet={wallet} index={index} key={wallet.address} defaultRate={defaultRate}/>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   )
 }
 

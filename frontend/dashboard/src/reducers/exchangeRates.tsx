@@ -8,7 +8,7 @@ const exchangeRateReducer = (state: ExchangeRate[], action: Action) => {
       ]
     case Types.EditExchangeRate:
       const index = state.findIndex(function(er){
-        return er.id === action.payload.id;
+        return er.currency === action.payload.currency;
       })
       return [
         ...state.slice(0, index),
