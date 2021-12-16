@@ -76,7 +76,9 @@ const WalletCard = ({ wallet, defaultRate, index }: WalletProps) => {
       wallets.forEach((wallet, index) => {
         wallet.position = index;
       });
-      await updateWallets(wallets, token);
+      if (wallets && wallets.length) {
+        await updateWallets(wallets, token);
+      }
       dispatch({
         type: Types.Load,
         payload: wallets
