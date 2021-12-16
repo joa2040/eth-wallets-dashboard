@@ -35,7 +35,7 @@ export class WalletController {
 
     logger.info(`Saving wallet with address ${wallet.address}`);
     try {
-      return this.walletService.addWallet(wallet);
+      return await this.walletService.addWallet(wallet);
     } catch (e) {
       logger.error(e);
       throw new HttpException({
@@ -75,7 +75,7 @@ export class WalletController {
   async getWallets(@Param('user') user): Promise<Wallet[]> {
     logger.info(`Getting wallets for user ${user}`);
     try {
-      return this.walletService.loadWalletsByUser(user);
+      return await this.walletService.loadWalletsByUser(user);
     } catch (e) {
       logger.error(e);
       throw new HttpException({
@@ -88,7 +88,7 @@ export class WalletController {
   /**
    * Delete method to delete a wallet
    *
-   * @param wallets[]
+   * @param wallet[]
    * @return Promise<void>
    */
   @Delete()
