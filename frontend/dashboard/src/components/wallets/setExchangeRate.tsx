@@ -5,11 +5,12 @@ import { AppContext } from "../../contexts/appContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import { saveExchangeRates } from "../../middleware";
 import { LoadingContext } from "../../contexts/loadingContext";
+import { AxiosError } from "axios";
 
 const SetExchangeRate = ({ defaultRate }: { defaultRate: ExchangeRate }) => {
   const { state, dispatch } = useContext(AppContext);
-  const { showLoading, hideLoading } = useContext(LoadingContext)
-  const { user } = useAuth0();
+  const { showLoading, hideLoading, showError } = useContext(LoadingContext)
+  const { user, getAccessTokenSilently } = useAuth0();
 
   const [ { currency, rate }, setState ] = useState(defaultRate);
 
@@ -32,10 +33,15 @@ const SetExchangeRate = ({ defaultRate }: { defaultRate: ExchangeRate }) => {
       { currency, rate, user: user?.email },
       ...state.rates.slice(index + 1)
     ]
-    await saveExchangeRates(rates);
-
-    dispatch({ type: Types.LoadExchangeRates, payload: rates });
-    hideLoading();
+    try {
+      const token = await getAccessTokenSilently();
+      await saveExchangeRates(rates, token);
+      dispatch({ type: Types.LoadExchangeRates, payload: rates });
+      hideLoading();
+    } catch(e) {
+      const axiosError = e as AxiosError;
+      showError(axiosError.response?.data.error);
+    }
   }
 
   return (

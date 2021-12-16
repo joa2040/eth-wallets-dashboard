@@ -11,12 +11,13 @@ const AddWallet = () => {
   const [ address, setAddress ] = useState('');
   const { state, dispatch } = useContext(AppContext);
   const { showLoading, hideLoading, showError } = useContext(LoadingContext);
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
 
   const handleAddWallet = async () => {
     showLoading();
     try {
-      const wallet = await addWallet({ address, position: state.wallets.length + 1, balance: 0, user: user?.email });
+      const token = await getAccessTokenSilently();
+      const wallet = await addWallet({ address, position: state.wallets.length + 1, balance: 0, user: user?.email }, token);
       dispatch({
         type: Types.Add,
         payload: wallet

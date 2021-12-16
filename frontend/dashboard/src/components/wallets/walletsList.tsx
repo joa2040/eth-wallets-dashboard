@@ -5,10 +5,13 @@ import { ExchangeRate, Types, Wallet } from "../../interfaces";
 import { AppContext } from "../../contexts/appContext";
 import { updateWallets } from "../../middleware";
 import { LoadingContext } from "../../contexts/loadingContext";
+import { AxiosError } from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const WalletList = ({ defaultRate }: { defaultRate: ExchangeRate }) => {
   const { state, dispatch } = useContext(AppContext);
-  const { showLoading, hideLoading } = useContext(LoadingContext);
+  const { showLoading, hideLoading, showError } = useContext(LoadingContext);
+  const { getAccessTokenSilently } = useAuth0();
 
   const onDragEnd = async (result: DropResult) => {
     showLoading();
@@ -29,14 +32,18 @@ const WalletList = ({ defaultRate }: { defaultRate: ExchangeRate }) => {
       wallet.position = index;
     });
 
-    await updateWallets(copiedWallets);
-
-    dispatch({
-      type: Types.Load,
-      payload: copiedWallets
-    });
-
-    hideLoading();
+    try {
+      const token = await getAccessTokenSilently();
+      await updateWallets(copiedWallets, token);
+      dispatch({
+        type: Types.Load,
+        payload: copiedWallets
+      });
+      hideLoading();
+    } catch (e) {
+      const axiosError = e as AxiosError;
+      showError(axiosError.response?.data.error);
+    }
   };
 
   return (

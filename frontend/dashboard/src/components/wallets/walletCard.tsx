@@ -9,6 +9,8 @@ import { updateWallets } from "../../middleware";
 import { LoadingContext } from "../../contexts/loadingContext";
 import moment from "moment";
 import { deleteWallet } from "../../middleware/wallet";
+import { AxiosError } from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const dollarUS = Intl.NumberFormat("en-US", {
   style: "currency",
@@ -20,7 +22,8 @@ const WalletCard = ({ wallet, defaultRate, index }: WalletProps) => {
   const { state, dispatch } = useContext(AppContext);
   const [ rate, setRate ] = useState(defaultRate);
   const [ showModal, setShowModal ] = useState(false);
-  const { showLoading, hideLoading } = useContext(LoadingContext);
+  const { showLoading, hideLoading, showError } = useContext(LoadingContext);
+  const { getAccessTokenSilently } = useAuth0();
 
   const transactionMessage = wallet.firstTransaction ?
     `Last Transaction ${moment.unix(wallet.firstTransaction).format("MM/DD/YYYY")}` : `Wallet has no transactions yet`
@@ -43,13 +46,18 @@ const WalletCard = ({ wallet, defaultRate, index }: WalletProps) => {
       wallet.position = index;
     })
 
-    await updateWallets(updatedWallets);
-
-    dispatch({
-      type: Types.Load,
-      payload: updatedWallets
-    });
-    hideLoading();
+    try {
+      const token = await getAccessTokenSilently();
+      await updateWallets(updatedWallets, token);
+      dispatch({
+        type: Types.Load,
+        payload: updatedWallets
+      });
+      hideLoading();
+    } catch(e) {
+      const axiosError = e as AxiosError;
+      showError(axiosError.response?.data.error);
+    }
   }
 
   const handleOnChangeCurrency = (currency: string) => {
@@ -61,18 +69,23 @@ const WalletCard = ({ wallet, defaultRate, index }: WalletProps) => {
     setShowModal(false);
     showLoading();
 
-    const wallets = state.wallets.filter(w => w.address !== wallet.address);
-    await deleteWallet(wallet);
-    wallets.forEach((wallet, index) => {
-      wallet.position = index;
-    });
-    await updateWallets(wallets);
-    dispatch({
-      type: Types.Load,
-      payload: wallets
-    });
-
-    hideLoading();
+    try {
+      const wallets = state.wallets.filter(w => w.address !== wallet.address);
+      const token = await getAccessTokenSilently();
+      await deleteWallet(wallet, token);
+      wallets.forEach((wallet, index) => {
+        wallet.position = index;
+      });
+      await updateWallets(wallets, token);
+      dispatch({
+        type: Types.Load,
+        payload: wallets
+      });
+      hideLoading();
+    } catch(e) {
+      const axiosError = e as AxiosError;
+      showError(axiosError.response?.data.error);
+    }
   }
 
   return (

@@ -8,23 +8,27 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { LoadingContext } from "../contexts/loadingContext";
 import { Loading } from "../components/utils";
 import Error from "../components/utils/error";
+import { AxiosError } from "axios";
 
 const Dashboard = () => {
   const { state, dispatch } = useContext(AppContext);
-  const { showLoading, hideLoading, loadingCount, cleanError } = useContext(LoadingContext)
-  const { user } = useAuth0();
+  const { showLoading, hideLoading, loadingCount, showError, cleanError } = useContext(LoadingContext)
+  const { user, getAccessTokenSilently } = useAuth0();
 
   const fetchWallets = useCallback(async () => {
-    return loadWallets(user?.email);
-  }, [ user?.email ]);
+    const token = await getAccessTokenSilently();
+    return loadWallets(user?.email, token);
+  }, [ user?.email, getAccessTokenSilently ]);
 
   const fetchExchangeRates = useCallback(async () => {
-    return loadExchangeRates(user?.email);
-  }, [ user?.email ]);
+    const token = await getAccessTokenSilently();
+    return loadExchangeRates(user?.email, token);
+  }, [ user?.email, getAccessTokenSilently ]);
 
   const fetchCurrencies = useCallback(async () => {
-    return loadCurrencies();
-  }, []);
+    const token = await getAccessTokenSilently();
+    return loadCurrencies(token);
+  }, [getAccessTokenSilently]);
 
   useEffect( () => {
     cleanError();
@@ -38,8 +42,11 @@ const Dashboard = () => {
       });
       dispatch({ type: Types.Load, payload: wallets });
       hideLoading();
+    }).catch(e => {
+      const axiosError = e as AxiosError;
+      showError(axiosError.response?.data.error);
     });
-  }, [ fetchWallets, dispatch, showLoading, hideLoading ]);
+  }, [ fetchWallets, dispatch, showLoading, hideLoading, showError ]);
 
   useEffect(() => {
     showLoading();
@@ -54,16 +61,22 @@ const Dashboard = () => {
       });
       dispatch({ type: Types.LoadExchangeRates, payload: exchangeRatesWithDefaultValues });
       hideLoading();
+    }).catch(e => {
+      const axiosError = e as AxiosError;
+      showError(axiosError.response?.data.error);
     });
-  }, [ state.currencies, fetchExchangeRates, user?.email, dispatch, showLoading, hideLoading ]);
+  }, [ state.currencies, fetchExchangeRates, user?.email, dispatch, showLoading, hideLoading, showError ]);
 
   useEffect(() => {
     showLoading();
     fetchCurrencies().then(currencies => {
       dispatch({ type: Types.LoadCurrencies, payload: currencies });
       hideLoading();
+    }).catch(e => {
+      const axiosError = e as AxiosError;
+      showError(axiosError.response?.data.error);
     });
-  }, [ fetchCurrencies, dispatch, showLoading, hideLoading ]);
+  }, [ fetchCurrencies, dispatch, showLoading, hideLoading, showError ]);
 
   return (
     <Fragment>
