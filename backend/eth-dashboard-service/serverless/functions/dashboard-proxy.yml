@@ -10,7 +10,7 @@ Proxy:
         method: ANY
         path: '{proxy+}'
         cors: true
-#        authorizer:
-#          arn: arn:aws:lambda:${aws:region}:${aws:accountId}:function:${self:custom.authorizer-service-name}
-#          type: token
-#          resultTtlInSeconds: 0
+        authorizer:
+          arn: arn:aws:lambda:${aws:region}:${aws:accountId}:function:${self:custom.authorizer-service-name}
+          type: token
+          resultTtlInSeconds: 0

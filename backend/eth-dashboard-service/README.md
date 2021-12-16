@@ -1,73 +1,26 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Business logic for challenge dashboard.
+This project is deployed as serverless project on AWS. To install it please run.
+
+```
+npm install -g serverless
+```
 
 ## Installation
 
-```bash
+```
 $ npm install
 ```
 
 ## Running the app
 
 ```bash
-# development
+# development no DB
 $ npm run start
 
-# watch mode
-$ npm run start:dev
-
 # production mode
-$ npm run start:prod
+$ serverless deploy -s d
 ```
+![alt text] (https://public-joaquin.s3.us-east-1.amazonaws.com/Screen%20Shot%202021-12-15%20at%2022.57.48.png?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXNhLWVhc3QtMSJGMEQCIEUb%2F8HClS1o1pFDqu8sdlC3FsiIStyfM3kGvcZEuhi%2BAiAP64rT0HkpGZYkGFdwzIYDGOy3qq9J%2F1lxBqhFwnAqbyr%2FAgiE%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDM3MTQyODk1NzY5OSIM3aylFMeWAjTULQlmKtMCWx3PKwlDSGNjoFUgTmKL27evzz2GitwdJ5kIatvEfGB5Rru3aLkMOj9C%2BlziN68%2FuikVVj%2F6glTxvYr9LwIzOCJM4p6lg%2Fczq8QaiwOksfmdspjLDHRc8ZtSorgIXezk0WxGVjNRlqGYTrTs4YRIBy1p949LV33iWZ22hdcx5YaqQqoVoggJPFozbvXgU0qjyW6V159yIIbyBKemhx2yUHmzmeMoo88E9x8bErFBHxEzOVvTe3g86XIHTEclKCJZUw%2F8GXZ12fgxEynuK3Knt5zCVIEQxxY4EOUSLwEYPI0XxubIi06qD0UdSKiaB%2FNIOcIWSqPsCKkS9ajt4DiRTHtni9O2twaYb5UVAswrB%2FEc3cPu2ijGXkM7esblqvZRxNnsubgj%2FBnZq7BNLPxUF7IsVpBDZNq6rBirSNaCLCvPPM1v9iesdlC0q6mvmQnnXp%2FHMJuP6o0GOrQCpatfx%2FDQ%2BqdYKdbGTojP3iFhda5F2UvC6dKGFity0T91nzIfuYBxliWdSSjaCAbWEUChJxC0hJrF1eWEUu8%2B09ESa5D4%2FuAVZO2pnb5h4xCV0zIBL6gtjHg6pX5Tf04OB9U3M%2BVsRiqkg%2FRCs1yYcu5eOE4Pvwk2ShlZ0BKMmY52UOdNOHyWUuCCmcvECMpngPpVbzjCWlO3vcN0zUc47ujlF3ErNNGHXRUI%2B%2F9XXCeiMAzK1YuStm5sz7AF%2F7DwHAfhVJvIbsRHDhihErJpQ%2B9Gg6CT7xB8AO966WURYt7nOdiUf4BGUVNhbeP5V64CjbLOApLDLZGCYElLY257n2DIQstE6mnTZ2on0OSdNgQmdAlbxOAkk3UEFArRo9fPe4wGUKYS5NPFQvEFdz4ZKazqRTM%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20211216T024210Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAVM6XEDYB5WJINWGG%2F20211216%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=442ab87c8fe08c2aeb4a888b380948d9d9662270cf901396fb9a1bba9885f57f)
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
