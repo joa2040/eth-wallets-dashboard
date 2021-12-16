@@ -1,6 +1,5 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
+Dashboard to manage eth wallets. This test app uses kovan network.
 
 ## Available Scripts
 
@@ -14,33 +13,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## App Architecture
+<img src="https://public-joaquin.s3.us-east-1.amazonaws.com/Screen%20Shot%202021-12-15%20at%2023.48.51.png?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXNhLWVhc3QtMSJGMEQCIEUb%2F8HClS1o1pFDqu8sdlC3FsiIStyfM3kGvcZEuhi%2BAiAP64rT0HkpGZYkGFdwzIYDGOy3qq9J%2F1lxBqhFwnAqbyr%2FAgiE%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDM3MTQyODk1NzY5OSIM3aylFMeWAjTULQlmKtMCWx3PKwlDSGNjoFUgTmKL27evzz2GitwdJ5kIatvEfGB5Rru3aLkMOj9C%2BlziN68%2FuikVVj%2F6glTxvYr9LwIzOCJM4p6lg%2Fczq8QaiwOksfmdspjLDHRc8ZtSorgIXezk0WxGVjNRlqGYTrTs4YRIBy1p949LV33iWZ22hdcx5YaqQqoVoggJPFozbvXgU0qjyW6V159yIIbyBKemhx2yUHmzmeMoo88E9x8bErFBHxEzOVvTe3g86XIHTEclKCJZUw%2F8GXZ12fgxEynuK3Knt5zCVIEQxxY4EOUSLwEYPI0XxubIi06qD0UdSKiaB%2FNIOcIWSqPsCKkS9ajt4DiRTHtni9O2twaYb5UVAswrB%2FEc3cPu2ijGXkM7esblqvZRxNnsubgj%2FBnZq7BNLPxUF7IsVpBDZNq6rBirSNaCLCvPPM1v9iesdlC0q6mvmQnnXp%2FHMJuP6o0GOrQCpatfx%2FDQ%2BqdYKdbGTojP3iFhda5F2UvC6dKGFity0T91nzIfuYBxliWdSSjaCAbWEUChJxC0hJrF1eWEUu8%2B09ESa5D4%2FuAVZO2pnb5h4xCV0zIBL6gtjHg6pX5Tf04OB9U3M%2BVsRiqkg%2FRCs1yYcu5eOE4Pvwk2ShlZ0BKMmY52UOdNOHyWUuCCmcvECMpngPpVbzjCWlO3vcN0zUc47ujlF3ErNNGHXRUI%2B%2F9XXCeiMAzK1YuStm5sz7AF%2F7DwHAfhVJvIbsRHDhihErJpQ%2B9Gg6CT7xB8AO966WURYt7nOdiUf4BGUVNhbeP5V64CjbLOApLDLZGCYElLY257n2DIQstE6mnTZ2on0OSdNgQmdAlbxOAkk3UEFArRo9fPe4wGUKYS5NPFQvEFdz4ZKazqRTM%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20211216T025053Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAVM6XEDYB5WJINWGG%2F20211216%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=9f2b4114c5eaafb3c24e5d0394976a013f21543a5b3e8345ea18b02547c076f3" width="350" title="Diagram">
