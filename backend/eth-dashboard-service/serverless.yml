@@ -25,7 +25,7 @@ custom:
 
 provider:
   name: aws
-  profile: joaquin
+  profile: ${self:custom.config.profile}
   runtime: nodejs14.x
   memorySize: 256
   timeout: 15
